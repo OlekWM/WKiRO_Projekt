@@ -1,4 +1,4 @@
-function [ samples ] = createSamplesByWindowSize( protein, secondLvlStruct, wndSize )
+function [ samples ] = createSamples( protein, secondLvlStruct, wndSize )
 % Wyznacza zbiór próbek o zadanym rozmiarze okna (ci¹g aminokwasów w
 % liczbie odpowiadaj¹cej rozmiarowi okna mapowany na jeden element
 % struktury drugorzêdowej.
