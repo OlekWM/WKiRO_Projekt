@@ -12,7 +12,11 @@ function [ samples ] = createSamples( protein, secondLvlStruct, wndSize )
 len = length(protein);
 
 for i = 1 : len
-    samples{i,1} = createWindow(protein, i, wndSize);
+    aminoVector = createWindow(protein, i, wndSize);
+    
+    aminoVector = protein2FeatureVector(aminoVector); % Zakomentowaæ, jeœli chcemy widzieæ próbki w formie tekstowej
+    
+    samples{i,1} = aminoVector;
     samples{i,2} = secondLvlStruct(i);
 end
 end
