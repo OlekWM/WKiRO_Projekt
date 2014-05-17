@@ -15,7 +15,7 @@ for i = 1 : samplesCount
     end
     
     binarySamples(j, 1) = samples(i, 1);
-    binarySamples(j, 2) = mat2cell(binaryClass);
+    binarySamples(j, 2) = {binaryClass};
     j = j + 1;
 end
 end
