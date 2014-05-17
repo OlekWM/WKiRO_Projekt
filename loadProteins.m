@@ -3,54 +3,36 @@ function [ proteins ] = loadProteins( filename )
 % W ka¿dym wierszu znajduje siê pierwszorzêdowa struktura oraz
 % drugorzêdowa.
 lines = textread(filename, '%s', 'whitespace','\b\t');
-lines = stripNonRelevant(lines);
-proteins = format(lines);
+parts = split(lines);
+partsCount = length(parts);
+
+for i=1:partsCount
+    proteins{i} = format(parts{i});
+end
 end
 
 
 
 function [ formatted ] = format ( lines )
-% £¹czy kolejne linie w jedn¹, dopóki s¹ zakoñczone znakiem równoœci
-% Wyniki umieszcza w parach (w dwóch kolumnach).
+% lines - kolejne linie bia³ka (jego podstawowej struktury i drugorzêdowej)
+% zwraca dwie kolumny - pierwszorzêdow¹ strukturê, oraz drugorzêdow¹
 len = length(lines);
-j = 1;
-k = 1;
-result = {};
-col = 1;
-for i=1:len
-    line = lines(i);
-    temp = cell2mat(line);
-    result{j, col} = line;
-    j = j + 1;
-    
-    if temp(length(temp)) ~= '='
-        if col == 2
-            r1 = mergeLines(result(:, 1));
-            r2 = mergeLines(result(:, 2));
-            formatted{k, 1} = r1;
-            formatted{k, 2} = r2;
-            k = k + 1;
-            result = [];
-        end
-        j = 1;
-        col = 3 - col;
-    end
-end
+halfLen = len / 2;
+lvl1 = lines(1 : halfLen);
+lvl2 = lines(halfLen + 1 : end);
+formatted{1} = mergeLines(lvl1);
+formatted{2} = mergeLines(lvl2);
 end
 
 function [ merged ] = mergeLines ( lines )
 len = length(lines);
 merged = char.empty;
 for i = 1 : len
-    mat = cell2mat(lines{i});
+    mat = cell2mat(lines(i));
     mat_len = length(mat);
     
-    if i < len
+    if(mat(end)) == '='
         mat_len = mat_len - 1;
-    end
-    
-    if mat_len < 1
-        break;
     end
     
     start = length(merged) + 1;
@@ -59,15 +41,26 @@ for i = 1 : len
 end
 end
 
-function [ samples ] = stripNonRelevant ( lines )
-% Wycina nieistotne linie, pozostawiaj¹c jedynie dane o bia³kach
+function [ parts ] = split ( lines )
+% Wycina nieistotne linie wydzielaj¹c jednoczeœnie kolejne bia³ka z ich
+% mapowaniami.
+% parts - tablica komórek, gdzie ka¿da komórka odpowiada jednemu bia³ku -
+% zawiera tablicê z liniami z pliku dla danego bia³ka (pierwszo i
+% drugorzêdowa struktura.
 len = length(lines);
+part = 1;
 j = 1;
-for i=1:len
+for i=2:len
     temp = cell2mat(lines(i));
-    if temp(1) ~= '>'
-        samples(j) = lines(i);
-        j = j + 1;
+    if temp(1) == '>'
+        parts{part} = sample;
+        part = part + 1;
+        j = 1;
+        continue;
     end
+    
+    sample(j) = lines(i);
+    j = j + 1;
 end
+parts{part} = sample;
 end
