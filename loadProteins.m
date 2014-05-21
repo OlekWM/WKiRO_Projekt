@@ -56,6 +56,7 @@ for i=2:len
         parts{part} = sample;
         part = part + 1;
         j = 1;
+        sample = cell(0);
         continue;
     end
     
