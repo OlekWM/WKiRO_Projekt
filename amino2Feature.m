@@ -1,11 +1,11 @@
 function [ output ] = amino2Feature( amino )
 % Dla danego aminokwasu zwraca jego wektor cech jako komórkê - HARDCODED.
 
-aminos = 'ABCDEFGHIJKLMNOPQRSTUVWXY';
-result = zeros(1, 25);
+aminos = 'ILVPFMWACGYTSHQKNEDR';
+result = zeros(1, 20);
 found = 0;
 
-for i =  1 : 25
+for i =  1 : 20
     if amino == aminos(i)
         result(i) = 1;
         found = 1;
