@@ -19,6 +19,11 @@ samples = shuffleSamples(samples);
 [modelHnotH, accHnotH] = createBinaryClassifier(trainSamples, testSamples, @class2HnotH);
 [modelCE, accCE] = createBinaryClassifier(trainSamples, testSamples, @class2CE);
 
-output = [ accHnotH, accCE ];
+testFeatures = convertFeatures(testSamples(:, 1));
+testExpected = testSamples(:, 2);
+testResult = hierarchicalClassifier(modelHnotH, modelCE, '~H', testFeatures);
+testAcc = checkAccuracy(testResult, testExpected);
+
+output = [ testAcc, accHnotH, accCE ];
 end
 
