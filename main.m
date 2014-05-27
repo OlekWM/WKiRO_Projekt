@@ -11,29 +11,8 @@ disp('Tworzenie próbek dla rozmiaru okna');
 limit = min(limit, length(proteins));
 samples = proteins2Samples(proteins(1:limit), wndSize);
 
-% Utworzenie zbiorów próbek klas binarnych
-disp('Konwersja na klasy binarne');
-sampCnotC = createBinarySamples(samples, @class2CnotC);
-sampHnotH = createBinarySamples(samples, @class2HnotH);
-%sampEnotE = createBinarySamples(samples, @class2EnotE);
-%sampCH = createBinarySamples(samples, @class2CH);
-%sampCE = createBinarySamples(samples, @class2CE);
-%sampHE = createBinarySamples(samples, @class2HE);
-
-% Losowa kolejnoœæ próbek
-disp('Losowanie');
-sampCnotC = shuffleSamples(sampCnotC);
-sampHnotH = shuffleSamples(sampHnotH);
-%sampEnotE = shuffleSamples(sampEnotE);
-%sampCH = shuffleSamples(sampCH);
-%sampCE = shuffleSamples(sampCE);
-%sampHE = shuffleSamples(sampHE);
-
-% Podzia³ na zbiory testowe i treningowe (dodaæ póŸniej tak¿e walidacyjny)
-disp('Podzia³ na zbiór treningowy i testowy');
-[sampCnotCTrain, sampCnotCTest] = splitSamples(sampCnotC, 0.7);
-[sampHnotHTrain, sampHnotHTest] = splitSamples(sampHnotH, 0.7);
-%...
+[sampHnotHTrain, sampHnotHTest] = prepareSamples(samples, @class2HnotH, 0.6);
+%[sampCnotCTrain, sampCnotCTest] = prepareSamples(samples, @class2CnotC, 0.6);
 
 trainSet = sampHnotHTrain;
 testSet = sampHnotHTest;
@@ -48,7 +27,7 @@ result = svmclassify(model, test);
 correct = 0;
 testLength = length(result);
 for i = 1 : testLength
-    if(cell2mat(testSet(i, 2)) == cell2mat(result(i)))
+    if (cell2mat(testSet(i, 2)) == cell2mat(result(i)))
         correct = correct + 1;
     end
     %correct = sum(sampCnotCTest(2, :) == result);
