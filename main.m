@@ -1,4 +1,4 @@
-function [ output ] = main( filename, wndSize )
+function [ output ] = main( filename, wndSize, limit )
 % Testowa g³ówna funkcja, parametry wyjœciowe testowo ustalane, ¿eby
 % zobaczyæ na aktualny etapie projektu
 
@@ -8,12 +8,13 @@ proteins = loadProteins(filename);
 
 % Utworzenie próbek o zadanym rozmiarze okna (próbka -> klasa)
 disp('Tworzenie próbek dla rozmiaru okna');
-samples = proteins2Samples(proteins, wndSize);
+limit = min(limit, length(proteins));
+samples = proteins2Samples(proteins(1:limit), wndSize);
 
 % Utworzenie zbiorów próbek klas binarnych
 disp('Konwersja na klasy binarne');
 sampCnotC = createBinarySamples(samples, @class2CnotC);
-%sampHnotH = createBinarySamples(samples, @class2HnotH);
+sampHnotH = createBinarySamples(samples, @class2HnotH);
 %sampEnotE = createBinarySamples(samples, @class2EnotE);
 %sampCH = createBinarySamples(samples, @class2CH);
 %sampCE = createBinarySamples(samples, @class2CE);
@@ -22,7 +23,7 @@ sampCnotC = createBinarySamples(samples, @class2CnotC);
 % Losowa kolejnoœæ próbek
 disp('Losowanie');
 sampCnotC = shuffleSamples(sampCnotC);
-%sampHnotH = shuffleSamples(sampHnotH);
+sampHnotH = shuffleSamples(sampHnotH);
 %sampEnotE = shuffleSamples(sampEnotE);
 %sampCH = shuffleSamples(sampCH);
 %sampCE = shuffleSamples(sampCE);
@@ -30,30 +31,34 @@ sampCnotC = shuffleSamples(sampCnotC);
 
 % Podzia³ na zbiory testowe i treningowe (dodaæ póŸniej tak¿e walidacyjny)
 disp('Podzia³ na zbiór treningowy i testowy');
-[sampCnotCTrain, sampCnotCTest] = splitSamples(sampCnotC, 0.2);
+[sampCnotCTrain, sampCnotCTest] = splitSamples(sampCnotC, 0.7);
+[sampHnotHTrain, sampHnotHTest] = splitSamples(sampHnotH, 0.7);
 %...
+
+trainSet = sampHnotHTrain;
+testSet = sampHnotHTest;
 
 % Utworzenie klasyfikatorów SVM
 disp('Wyznaczanie modelu SVM');
-train = convertOlekTable(sampCnotCTrain(:, 1));
-test = convertOlekTable(sampCnotCTest(:, 1));
-model = svmtrain(train, sampCnotCTrain(:, 2), 'kernel_function', 'rbf');
+train = convertOlekTable(trainSet(:, 1));
+test = convertOlekTable(testSet(:, 1));
+model = svmtrain(train, trainSet(:, 2), 'kernel_function', 'rbf', 'autoscale', false);
 result = svmclassify(model, test);
 
 correct = 0;
 testLength = length(result);
 for i = 1 : testLength
-    if(cell2mat(sampCnotC(i, 2)) == cell2mat(result(i)))
+    if(cell2mat(testSet(i, 2)) == cell2mat(result(i)))
         correct = correct + 1;
     end
     %correct = sum(sampCnotCTest(2, :) == result);
 end
-disp(correct);
-disp(testLength);
-disp(correct / testLength);
+%disp(correct);
+%disp(testLength);
+%disp(correct / testLength);
 
-
-output = sampCnotCTrain;
+output = correct / testLength;
+%output = sampCnotCTrain;
 end
 
 % Konwersja typu danych wejœciowych dla SVM
