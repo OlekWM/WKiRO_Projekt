@@ -13,14 +13,12 @@ binaryTest = createBinarySamples(test, classFunc);
 
 featuresTrain = convertFeatures(binaryTrain(:, 1));
 featuresTest = convertFeatures(binaryTest(:, 1));
-labelsTrain = binaryTrain(:, 2);
-labelsTest = binaryTest(:, 2);
+labelsTrain = cell2mat(binaryTrain(:, 2));
+labelsTest = cell2mat(binaryTest(:, 2));
 
 % Wyznaczenie modelu klasyfikatora SVM
-model = svmtrain(featuresTrain, labelsTrain, 'kernel_function', 'rbf', 'rbf_sigma', 1.5, 'autoscale', false);
+model = svmtrain(labelsTrain, featuresTrain, '-s 0 -t 2 -g 0.1 -c 1.5');
 
 % Kontrola dok³adnoœci klasyfikatora binarnego
-result = svmclassify(model, featuresTest);
-acc = checkAccuracy(result, labelsTest);
-
+[~, acc, ~] = svmpredict(labelsTest, featuresTest, model);
 end

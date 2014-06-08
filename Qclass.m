@@ -6,7 +6,7 @@ totalInClass = 0;
 testLength = length(expected);
 for i = 1 : testLength
     exp = cell2mat(expected(i));
-    res = cell2mat(result(i));
+    res = result(i);
     
     if(exp == class)
         totalInClass = totalInClass + 1;

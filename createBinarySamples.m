@@ -10,7 +10,7 @@ for i = 1 : samplesCount
     generalClass = samples(i, 2);
     binaryClass = classFunction(cell2mat(generalClass));
     
-    if isempty(binaryClass)
+    if binaryClass == -1
         continue;
     end
     

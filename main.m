@@ -33,6 +33,6 @@ Qc = Qclass(testResult, testExpected, 'C')
 Qh = Qclass(testResult, testExpected, 'H')
 
 testAcc = checkAccuracy(testResult, testExpected);
-output = [ testAcc, accHnotH, accCE ];
+output = [ testAcc, accHnotH(1), accCE(1) ];
 end
 
