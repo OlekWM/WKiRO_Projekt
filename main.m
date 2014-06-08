@@ -19,11 +19,20 @@ samples = shuffleSamples(samples);
 [modelHnotH, accHnotH] = createBinaryClassifier(trainSamples, testSamples, @class2HnotH);
 [modelCE, accCE] = createBinaryClassifier(trainSamples, testSamples, @class2CE);
 
+%[~, accCnotC] = createBinaryClassifier(trainSamples, testSamples, @class2CnotC);
+%[~, accEnotE] = createBinaryClassifier(trainSamples, testSamples, @class2EnotE);
+%[~, accCH] = createBinaryClassifier(trainSamples, testSamples, @class2CH);
+%[~, accHE] = createBinaryClassifier(trainSamples, testSamples, @class2HE);
+
 testFeatures = convertFeatures(testSamples(:, 1));
 testExpected = testSamples(:, 2);
 testResult = hierarchicalClassifier(modelHnotH, modelCE, '~H', testFeatures);
-testAcc = checkAccuracy(testResult, testExpected);
 
+Qe = Qclass(testResult, testExpected, 'E')
+Qc = Qclass(testResult, testExpected, 'C')
+Qh = Qclass(testResult, testExpected, 'H')
+
+testAcc = checkAccuracy(testResult, testExpected);
 output = [ testAcc, accHnotH, accCE ];
 end
 

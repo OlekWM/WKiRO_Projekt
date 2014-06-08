@@ -17,7 +17,7 @@ labelsTrain = binaryTrain(:, 2);
 labelsTest = binaryTest(:, 2);
 
 % Wyznaczenie modelu klasyfikatora SVM
-model = svmtrain(featuresTrain, labelsTrain, 'kernel_function', 'rbf', 'autoscale', false);
+model = svmtrain(featuresTrain, labelsTrain, 'kernel_function', 'rbf', 'rbf_sigma', 1.5, 'autoscale', false);
 
 % Kontrola dok³adnoœci klasyfikatora binarnego
 result = svmclassify(model, featuresTest);
