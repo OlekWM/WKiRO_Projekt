@@ -13,7 +13,7 @@ samples = proteins2Samples(proteins(1:limit), wndSize);
 
 % Podzia³ na zbiór treningowy i testowy
 samples = shuffleSamples(samples);
-[trainSamples, testSamples] = splitSamples(samples, 0.6);
+[trainSamples, testSamples] = splitSamples(samples, 0.7);
 
 % Wyznacznie modeli klasyfikatorów binarnych
 [modelHnotH, accHnotH] = createBinaryClassifier(trainSamples, testSamples, @class2HnotH);
