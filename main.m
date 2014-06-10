@@ -27,7 +27,7 @@ for i = 1 : wndCount
     samples = proteins2Samples(proteins(1:limit), wndSize);
     
     % Podzia³ na zbiór treningowy walidacyjny i testowy
-    %samples = shuffleSamples(samples);
+    samples = shuffleSamples(samples);
     [training, validation, test] = splitSamples(samples, proportions);
     
     for j = 1 : gammaCount
