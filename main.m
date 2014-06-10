@@ -1,4 +1,4 @@
-function [ output ] = main( filename, wndSize, limit )
+function [ results, best ] = main( filename, wndSize, limit )
 % Testowa g³ówna funkcja, parametry wyjœciowe testowo ustalane, ¿eby
 % zobaczyæ na aktualny etapie projektu
 
@@ -42,6 +42,26 @@ for i = 1 : wndCount
     end
 end
 
-output = results;
+best = takeBest(results);
+end
+
+function [ best ] = takeBest( results )
+    len = size(results, 1);
+    
+    % Czwarta kolumna to Q3
+    max = results(1, 4);
+    maxIndex = 1;
+    for i = 2 : (len / 2)
+        % Szukamy wiersza z najlepszymi wynikami zbioru walidacyjnego
+        index = 2 * i - 1;
+        
+        if max < results(index, 4)
+            maxIndex = index; 
+            max = results(index, 4);
+        end
+    end
+    
+    % zwracamy wiersz z wynikami zbioru testowego
+    best = results(maxIndex + 1, :);
 end
 
