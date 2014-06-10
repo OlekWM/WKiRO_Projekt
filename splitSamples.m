@@ -1,12 +1,17 @@
-function [ set1 set2 ] = splitSamples( samples, ratio )
-% Dzieli zbiór próbek na dwa podzbiory o odpowiednim stosunku.
+function [ training, validation, test ] = splitSamples( samples, proportions )
+% Dzieli zbiór próbek na podzbiory treningowy, walidacyjny oraz testowy w
+% odpowiednich proporcjach.
 %
-% ratio - wspó³czynnik podzia³u
+% proportions - wektor 3 liczb - proporcje treningowy:walidacyjny:testowy
 
-len = length(samples(:,1));
-set1Count = ceil(ratio * len);
+sampCount = size(samples, 1);
 
-set1 = samples(1 : set1Count, :);
-set2 = samples(set1Count + 1 : end, :);
+sumProportions = sum(proportions);
+trainingCount = ceil((proportions(1) / sumProportions) * sampCount);
+validationCount = ceil((proportions(2) / sumProportions) * sampCount);
+
+training = samples(1 : trainingCount, :);
+validation = samples(trainingCount + 1 : trainingCount + validationCount, :);
+test = samples(trainingCount + validationCount + 1 : end, :);
 end
 

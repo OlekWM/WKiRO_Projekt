@@ -2,6 +2,10 @@ function [ output ] = main( filename, wndSize, limit )
 % Testowa g³ówna funkcja, parametry wyjœciowe testowo ustalane, ¿eby
 % zobaczyæ na aktualny etapie projektu
 
+filename = 'CB396_dssp.txt';
+wndSize = 7;
+limit = 10;
+
 % Wczytanie bia³ek z pliku
 disp('Wczytywanie danych');
 proteins = loadProteins(filename);
@@ -13,26 +17,14 @@ samples = proteins2Samples(proteins(1:limit), wndSize);
 
 % Podzia³ na zbiór treningowy i testowy
 samples = shuffleSamples(samples);
-[trainSamples, testSamples] = splitSamples(samples, 0.7);
+[training, validation, test] = splitSamples(samples, [2 1 1]);
 
-% Wyznacznie modeli klasyfikatorów binarnych
-[modelHnotH, accHnotH] = createBinaryClassifier(trainSamples, testSamples, @class2HnotH);
-[modelCE, accCE] = createBinaryClassifier(trainSamples, testSamples, @class2CE);
+gamma = 0.1;
+c = 1.5;
 
-%[~, accCnotC] = createBinaryClassifier(trainSamples, testSamples, @class2CnotC);
-%[~, accEnotE] = createBinaryClassifier(trainSamples, testSamples, @class2EnotE);
-%[~, accCH] = createBinaryClassifier(trainSamples, testSamples, @class2CH);
-%[~, accHE] = createBinaryClassifier(trainSamples, testSamples, @class2HE);
+fprintf('Testowanie dla gamma=%d, c=%d\n', gamma, c);
+[ validationResults, testResults ] = train(training, validation, test, gamma, c);
 
-testFeatures = convertFeatures(testSamples(:, 1));
-testExpected = testSamples(:, 2);
-testResult = hierarchicalClassifier(modelHnotH, modelCE, '~H', testFeatures);
-
-Qe = Qclass(testResult, testExpected, 'E')
-Qc = Qclass(testResult, testExpected, 'C')
-Qh = Qclass(testResult, testExpected, 'H')
-
-testAcc = checkAccuracy(testResult, testExpected);
-output = [ testAcc, accHnotH(1), accCE(1) ];
+output = [ validationResults; testResults ];
 end
 
