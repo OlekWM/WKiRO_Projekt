@@ -1,5 +1,5 @@
 function [ proteins ] = loadProteins( filename )
-%LOADPROTEINS £aduje dane o bia³kach
+% £aduje dane o bia³kach ze wskazanego pliku.
 % W ka¿dym wierszu znajduje siê pierwszorzêdowa struktura oraz
 % drugorzêdowa.
 lines = textread(filename, '%s', 'whitespace','\b\t');
@@ -10,8 +10,6 @@ for i=1:partsCount
     proteins{i} = format(parts{i});
 end
 end
-
-
 
 function [ formatted ] = format ( lines )
 % lines - kolejne linie bia³ka (jego podstawowej struktury i drugorzêdowej)

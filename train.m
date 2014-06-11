@@ -1,6 +1,12 @@
 function [ validationResults, testResults  ] = train( training, validation, test, gamma, c )
 % Tworzy klasyfikator svm dla podanych parametrów gamma i c a nastêpnie go
 % ocenia wzglêdem zbioru walidacyjnego i testowego.
+% 
+% training - zbiór treningowy
+% validation - zbiór walidacyjny
+% test - zbiór testowy
+% gamma - parametr gamma dla SVM
+% c - parametr C dla SVM
 
 % Wyznacznie modeli klasyfikatorów binarnych
 [modelHnotH, validationAccHnotH, testAccHnotH] = createBinaryClassifier(training, validation, test, @class2HnotH, gamma, c);
@@ -14,6 +20,7 @@ testFeatures = convertFeatures(test(:, 1));
 testExpected = test(:, 2);
 testR = hierarchicalClassifier(modelHnotH, modelCE, 'HCE', testFeatures);
 
+% Wyliczanie miar Q dla klas wzglêdem zbioru walidacyjnego i testowego.
 valQe = Qclass(validationR, validationExpected, 'E');
 valQc = Qclass(validationR, validationExpected, 'C');
 valQh = Qclass(validationR, validationExpected, 'H');

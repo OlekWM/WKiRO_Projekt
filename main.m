@@ -1,16 +1,26 @@
-function [ results, best ] = main( filename, wndSize, limit )
-% Testowa g³ówna funkcja, parametry wyjœciowe testowo ustalane, ¿eby
-% zobaczyæ na aktualny etapie projektu
+function [ results, best ] = main( filename, wndSize, limit, proportions, c, gamma )
+% G³ówna funkcja
+% filename - plik z próbkami
+% wndSize - wektor rozmiarów okna
+% limit - ograniczenie liczby bia³ek 
+% proportions - proporcje zbioru treningowego do walidacyjnego do testowego
+% np. [2 1 1]
+% c - wektor parametru C dla SVM
+% gamma - wektor parametru gamma dla SVM
+% 
+% results - wszystkie wyniki dla ka¿dej kombinacji parametrów, po kolei:
+% rozmiar okna, gamma, c, Q3, Qh, Qc, Qe, Acc HnotH, Acc CE
+% best - najlepszy wynik
 
+% Zadanie wartoœci bezpoœrednio w funkcji, w celu szybszego i prostszego
+% uruchamiania wprost z matlaba.
 filename = 'CB396_dssp.txt';
-
 % Treningowy : walidacyjny : testowy
-proportions = [ 2, 1, 1];
-limit = 10;
-
-wndSize = [ 7, 9 ];
-c = [ 1, 1.5 ];
-gamma = [ 0.1 ];
+proportions = [ 1, 1, 1];
+limit = 100;
+wndSize = [ 5, 7, 9, 11, 13, 15, 17];
+c = [ 0.1, 0.5, 1, 1.5 ];
+gamma = [ 0.1, 0.2 ];
 
 % Wczytanie bia³ek z pliku
 disp('Wczytywanie danych');
@@ -23,7 +33,7 @@ gammaCount = length(gamma);
 
 for i = 1 : wndCount
     % Utworzenie próbek o zadanym rozmiarze okna (próbka -> klasa)
-    fprintf('Tworzenie próbek dla rozmiaru okna %d', wndSize(i));
+    fprintf('Tworzenie próbek dla rozmiaru okna %d\n', wndSize(i));
     samples = proteins2Samples(proteins(1:limit), wndSize);
     
     % Podzia³ na zbiór treningowy walidacyjny i testowy
