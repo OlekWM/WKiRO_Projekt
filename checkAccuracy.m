@@ -1,5 +1,5 @@
 function acc = checkAccuracy(result, expected)
-% Funkcja wyliczaj¹ca dok³adnoœæ jako procent poprawnych przewidywañ
+% Funkcja wyliczaj¹ca dok³adnoœæ jako procent poprawnych przewidywañ (Q3)
 
 correct = 0;
 testLength = length(expected);

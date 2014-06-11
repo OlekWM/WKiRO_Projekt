@@ -1,5 +1,5 @@
 function [ shuffled ] = shuffleSamples( samples )
-% Miesza próbki :)
+% Tworzy losow¹ permutacjê próbek.
 len = length(samples(:, 1));
 perm = randperm(len);
 shuffled = samples(perm, :);

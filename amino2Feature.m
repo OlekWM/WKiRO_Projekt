@@ -1,5 +1,5 @@
 function [ output ] = amino2Feature( amino )
-% Dla danego aminokwasu zwraca jego wektor cech jako komórkê - HARDCODED.
+% Dla danego aminokwasu zwraca jego wektor cech.
 
 aminos = 'ARNDCQEGHILKMFPSTWYV';
 hydroValues = [1.8 -4 -3.5 -3.5 2.5 -3.5 -3.5 0.4 -3.2 4.5 3.8 -3.9 1.9 2.8 -1.6 -0.8 -0.7 -0.9 -1.3 4.2];
